@@ -90,58 +90,58 @@ dependencies {
 
 // 如果使用了多个数据源，需要明确指出 Flyway 使用哪个数据源
 flyway {
-    url = 'jdbc:mysql://110.gz.cdb.myqcloud.com:3450/sharding_jdbc_test?useUnicode=true&characterEncoding=UTF-8&rewriteBatchedStatements=true'
+    url = 'jdbc:mysql://localhost:3306/sharding_jdbc_test?useUnicode=true&characterEncoding=UTF-8&rewriteBatchedStatements=true&useSSL=false'
     locations = ['filesystem:src/main/resources/db/migration']
     user = 'root'
-    password = '123456'
+    password = ''
     schemas = ['sharding_jdbc_test']
 }
 
-jooq {
-    version = jooqVersion
-    dependencies {
-        jooqRuntime("mysql:mysql-connector-java:$mysqlVersion")
-        // jooqRuntime("com.xxx:vjooq:$vjooqVersion") 依赖的是公司内部封装的插件
-    }
-    sample(sourceSets.main) {
-        def schema = 'sharding_jdbc_test'
-        jdbc {
-            driver = 'com.mysql.jdbc.Driver'
-            url = 'jdbc:mysql://110.gz.cdb.myqcloud.com:3450/sharding_jdbc_test?useUnicode=true&characterEncoding=UTF-8&rewriteBatchedStatements=true'
-            user = 'root'
-            password = '123456'
-        }
-        generator {
-            name = 'org.jooq.codegen.DefaultGenerator'
-            strategy {
-                // name = 'com.xxx.jooq.DDDStrategy' 依赖的是公司内部封装的插件
-            }
-            database {
-                name = 'org.jooq.meta.mysql.MySQLDatabase'
-                inputSchema = schema
-                outputSchema = schema
-                includes = '.*'
-                excludes = 'flyway_schema_history|message_.*'
-                includeExcludeColumns = true
-                forcedTypes {
-                    forcedType {
-                        name = 'varchar'
-                        expression = '.*'
-                        types = 'JSONB?'
-                    }
-                }
-            }
-            generate {
-                relations = true
-                deprecated = false
-                records = true
-                immutablePojos = true
-                fluentSetters = true
-            }
-            target {
-                packageName = 'db'
-                directory = 'src/main/java'
-            }
-        }
-    }
-}
+//jooq {
+//    version = jooqVersion
+//    dependencies {
+//        jooqRuntime("mysql:mysql-connector-java:$mysqlVersion")
+//        // jooqRuntime("com.xxx:vjooq:$vjooqVersion") 依赖的是公司内部封装的插件
+//    }
+//    sample(sourceSets.main) {
+//        def schema = 'sharding_jdbc_test'
+//        jdbc {
+//            driver = 'com.mysql.jdbc.Driver'
+//            url = 'jdbc:mysql://localhost:3306/sharding_jdbc_test?useUnicode=true&characterEncoding=UTF-8&rewriteBatchedStatements=true&useSSL=false'
+//            user = 'root'
+//            password = ''
+//        }
+//        generator {
+//            name = 'org.jooq.codegen.DefaultGenerator'
+//            strategy {
+//                // name = 'com.xxx.jooq.DDDStrategy' 依赖的是公司内部封装的插件
+//            }
+//            database {
+//                name = 'org.jooq.meta.mysql.MySQLDatabase'
+//                inputSchema = schema
+//                outputSchema = schema
+//                includes = '.*'
+//                excludes = 'flyway_schema_history|message_.*'
+//                includeExcludeColumns = true
+//                forcedTypes {
+//                    forcedType {
+//                        name = 'varchar'
+//                        expression = '.*'
+//                        types = 'JSONB?'
+//                    }
+//                }
+//            }
+//            generate {
+//                relations = true
+//                deprecated = false
+//                records = true
+//                immutablePojos = true
+//                fluentSetters = true
+//            }
+//            target {
+//                packageName = 'db'
+//                directory = 'src/main/java'
+//            }
+//        }
+//    }
+//}

@@ -1,10 +1,10 @@
 package com.qimok.sharding.aop;
 
 import com.qimok.sharding.aop.annotation.MultiDataSourceTransactional;
-import javafx.util.Pair;
 import org.aspectj.lang.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -74,7 +74,7 @@ public class MultiDataSourceTransactionAspect {
             PlatformTransactionManager transactionManager = applicationContext
                     .getBean(transactionManagerName, PlatformTransactionManager.class);
             TransactionStatus transactionStatus = transactionManager.getTransaction(dtd);
-            pairStack.push(new Pair(transactionManager, transactionStatus));
+            pairStack.push(Pair.of(transactionManager, transactionStatus));
         }
         THREAD_LOCAL.set(pairStack);
     }
@@ -101,9 +101,9 @@ public class MultiDataSourceTransactionAspect {
             // 栈顶弹出（后进先出）
             Pair<PlatformTransactionManager, TransactionStatus> pair = pairStack.pop();
             if (rollbackOrCommit.equals(COMMIT)) {
-                pair.getKey().commit(pair.getValue());
+                pair.getFirst().commit(pair.getSecond());
             } else {
-                pair.getKey().rollback(pair.getValue());
+                pair.getFirst().rollback(pair.getSecond());
             }
         }
         THREAD_LOCAL.remove();
